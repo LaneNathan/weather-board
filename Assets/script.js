@@ -155,7 +155,7 @@ function displayItems(city, data) {
     forecastDisplay(data.list);
 }
 
-function fetchweather(location){
+function fetchWeather(location){
     var { lat } = location;
     var { lon } = location;
 
