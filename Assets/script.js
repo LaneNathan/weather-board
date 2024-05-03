@@ -172,3 +172,47 @@ function fetchWeather(location){
         console.log(error);
     });
 }
+
+function cityCoords(search) {
+    var apiLink = `${weatherApiRootUrl}/geo/1.0/direct?q=${search}&limit=5&appid=${weatherApiKey}`;
+    fetch(apiLink)
+        .then((res)=>{
+        return res.json();
+    })
+        .then((data)=>{
+            if(!data[0]){
+                alert('No Location Found');
+            } else {
+                appendToHistory(search);
+                fetchWeather(data[0]);
+            }
+        })
+        .catch((error)=>{
+            console.log(error);
+        });
+}
+
+function searchHistorySubmit(e){
+    if(!searchInput.value){
+        return;
+    }
+
+    e.preventDefault();
+    var search = searchInput.value.trim();
+    cityCoords(search);
+    searchInput.value= '';
+}
+
+function searchHistoryClick(e){
+    if(!e.target.matches('.btn-history')){
+        return;
+    }
+
+    var btn = e.target;
+    var search = btn.getAttribute('data-search');
+    cityCoords(search);
+}
+
+connectSearchHistory();
+searchForm.addEventListener('submit', searchHistoryClick);
+searchHistory.addEventListener('click', searchHistoryClick);
