@@ -37,3 +37,12 @@ function displayHistory(searches){
     renderSearchHistory();
 }
 
+
+function connectSearchHistory(){
+    var storedHistory = localStorage.getItem('search-history');
+    if(storedHistory){
+        searched = JSON.parse(storedHistory);
+    }
+    renderSearchHistory();
+}
+
