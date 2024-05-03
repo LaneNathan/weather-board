@@ -124,3 +124,51 @@ function displayForecastCard(forecast){
 
     weekDisplay.append(col);
 }
+
+function forecastDisplay(dailyForecast){
+    var startDate = dayjs().add(1, 'day').startOf('day').unix();
+    var endDate = dayjs().add(6, 'day').startOf('day').unix();
+
+    var headerCol = document.createElement('div');
+    var header = document.createElement('h4');
+
+    headerCol.setAttribute('class', 'col-12');
+    header.textContent = '5-Day Forecast:';
+    headerCol.append(header);
+
+    weekDisplay.innerHTML = '';
+    weekDisplay.append(headerCol);
+
+    for(var i = 0; i< dailyForecast.length; i++) {
+
+        if(dailyForecast[i].dt >= startDate && dailyForecast[i].dt < endDate){
+
+            if(dailyForecast[i].dt_txt.slice(11,13) == "12"){
+                displayForecastCard(dailyForecast[i]);
+            }
+        }
+    }
+}
+
+function displayItems(city, data) {
+    currentWeekDisplay(city, data.list[0], data.city.timezone);
+    forecastDisplay(data.list);
+}
+
+function fetchweather(location){
+    var { lat } = location;
+    var { lon } = location;
+
+    var apiLink =  `${weatherApiRootUrl}/data/2.5/forecast?lat=${lat}&lon=${lon}&units=imperial&appid=${weatherApiKey}`;
+
+    fetch(apiLink)
+        .then((res) =>{
+        return res.json();
+    })
+        .then((data) =>{
+        displayItems(city, data);
+    })
+        .catch((error) =>{
+        console.log(error);
+    });
+}
