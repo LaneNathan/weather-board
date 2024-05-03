@@ -46,3 +46,42 @@ function connectSearchHistory(){
     renderSearchHistory();
 }
 
+function currentWeekDisplay(city, weather){
+    var date = dayjs().format('M/D/YYYY');
+
+    var temperature = weather.main.temp;
+    var windMph = weather.wind.speed;
+    var humidity = weather.main.humidity;
+    var iconLink = `https://openweathermap.org/img/w/${weather.weather[0].icon}.png`;
+    var iconDescription = weather.weather[0].description || weather[0].main;
+
+    var card = document.createElement('div');
+    var cardBody = document.createElement('div');
+    var heading = document.createElement('h2');
+    var weatherIcon = document.createElement('img');
+    var tempEl = document.createElement('p');
+    var windEl = document.createElement('p');
+    var humidityEl = document.createElement('p');
+  
+    card.setAttribute('class', 'card');
+    cardBody.setAttribute('class', 'card-body');
+    card.append(cardBody);
+
+    heading.setAttribute('class', 'h3 card-title');
+    tempEl.setAttribute('class', 'card-text');
+    windEl.setAttribute('class', 'card-text');
+    humidityEl.setAttribute('class', 'card-text');
+
+    heading.textContent = `${city} (${date})`;
+    weatherIcon.setAttribute('src', iconLink);
+    weatherIcon.setAttribute('alt', iconDescription);
+    weatherIcon.setAttribute('class', 'weather-img');
+    heading.append(weatherIcon);
+    tempEl.textContent = `Temp: ${temperature}°F`;
+    windEl.textContent = `Wind: ${windMph} MPH`;
+    humidityEl.textContent = `Humidity: ${humidity} %`;
+    cardBody.append(heading, tempEl, windEl, humidityEl);
+
+    todayDisplay.innerHTML = '';
+    todayDisplay.append(card);
+}
