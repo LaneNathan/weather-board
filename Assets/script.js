@@ -85,3 +85,42 @@ function currentWeekDisplay(city, weather){
     todayDisplay.innerHTML = '';
     todayDisplay.append(card);
 }
+
+function displayForecast(forecast){
+    var iconLink =  `https://openweathermap.org/img/w/${forecast.weather[0].icon}.png`;
+    var iconDescription = forecast.weather[0].description;
+    var temperature = forecast.main.temp;
+    var humidity = forecast.main.humidity;
+    var windMph = forecast.wind.speed;
+
+    var column = document.createElement('div');
+    var card = document.createElement('div');
+    var cardBody = document.createElement('div');
+    var cardTitle = document.createElement('h5');
+    var weatherIcon = document.createElement('img');
+    var tempEl = document.createElement('p');
+    var windEl = document.createElement('p');
+    var humidityEl = document.createElement('p');
+
+    column.append(card);
+    card.append(cardBody);
+    cardBody.append(cardTitle, weatherIcon,tempEl, windEl, humidityEl);
+
+    column.setAttribute('class', 'col-md');
+    column.classList.add('week-card');
+    card.setAttribute('class','card bg-primary h-100 text-lightblue');
+    cardBody.setAttribute('class', 'card-body p-2');
+    cardTitle.setAttribute('class','card-title');
+    tempEl.setAttribute('class', 'card-text');
+    windEl.setAttribute('class', 'card-text');
+    humidityEl.setAttribute('class', 'card-text');
+
+    cardTitle.textContent = dayjs(forecast.dt_txt).format('M/D/YYYY');
+    weatherIcon.setAttribute('src', iconLink);
+    weatherIcon.setAttribute('alt', iconDescription);
+    tempEl.textContent = `Temp: ${temperature} °F`
+    windEl.textContent = `Windspeed: ${windMph} MPH`
+    humidityEl.textContent = `Humidity: ${humidity} %`;
+
+    weekDisplay.append(col);
+}
