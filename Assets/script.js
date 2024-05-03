@@ -86,7 +86,7 @@ function currentWeekDisplay(city, weather){
     todayDisplay.append(card);
 }
 
-function displayForecast(forecast){
+function displayForecastCard(forecast){
     var iconLink =  `https://openweathermap.org/img/w/${forecast.weather[0].icon}.png`;
     var iconDescription = forecast.weather[0].description;
     var temperature = forecast.main.temp;
