@@ -1,9 +1,9 @@
 var searched= [];
-var weatherApiUrl = "https://api.openweathermap.org";
+var weatherApiRootUrl = "https://api.openweathermap.org";
 var weatherApiKey ='e8591d7b37c53d2741fdfd5e36865874';
 
 var searchForm = document.querySelector('#search-form');
-var searchInput = document.querySelector('#form-control');
+var searchInput = document.querySelector('#search-input');
 var todayDisplay = document.querySelector('#searched-display-today');
 var weekDisplay = document.querySelector('#week-display');
 var searchHistory = document.querySelector('#searched-history-list');
@@ -25,7 +25,6 @@ function renderSearchHistory(){
         searchHistory.append(btn);
     }
 }
-
 
 function displayHistory(searches){
     if (searched.indexOf(searches) !== -1){
@@ -122,7 +121,7 @@ function displayForecastCard(forecast){
     windEl.textContent = `Windspeed: ${windMph} MPH`
     humidityEl.textContent = `Humidity: ${humidity} %`;
 
-    weekDisplay.append(col);
+    weekDisplay.append(column);
 }
 
 function forecastDisplay(dailyForecast){
@@ -156,8 +155,7 @@ function displayItems(city, data) {
 }
 
 function fetchWeather(location){
-    var { lat } = location;
-    var { lon } = location;
+    var { lat, lon } = location;
 
     var apiLink =  `${weatherApiRootUrl}/data/2.5/forecast?lat=${lat}&lon=${lon}&units=imperial&appid=${weatherApiKey}`;
 
@@ -166,7 +164,7 @@ function fetchWeather(location){
         return res.json();
     })
         .then((data) =>{
-        displayItems(city, data);
+        displayItems(location.name, data);
     })
         .catch((error) =>{
         console.log(error);
@@ -192,6 +190,15 @@ function cityCoords(search) {
         });
 }
 
+function appendToHistory(search){
+    if(searched.indexOf(search) !== -1){
+        return;
+    }
+    searched.push(search);
+    localStorage.setItem('search-history', JSON.stringify(searched));
+    renderSearchHistory();
+}
+
 function searchHistorySubmit(e){
     if(!searchInput.value){
         return;
@@ -214,5 +221,5 @@ function searchHistoryClick(e){
 }
 
 connectSearchHistory();
-searchForm.addEventListener('submit', searchHistoryClick);
+searchForm.addEventListener('submit', searchHistorySubmit);
 searchHistory.addEventListener('click', searchHistoryClick);
